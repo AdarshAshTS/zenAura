@@ -1,0 +1,154 @@
+<div class="quora-container">
+  <!-- Background shapes -->
+  <div class="shape shape-a"></div>
+  <div class="shape shape-b"></div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input id="quora-search-input" class="search-input" type="text" placeholder="Search questions..."
+        [(ngModel)]="searchQuery" (input)="onSearchInput()" />
+      @if(searchQuery) {
+      <button class="clear-btn" (click)="clearSearch()">✕</button>
+      }
+    </div>
+    <div class="top-bar-right">
+      <span class="user-badge">{{ (userName || 'U').charAt(0).toUpperCase() }}</span>
+      <button id="ask-question-btn" class="ask-btn" (click)="openAskModal()">
+        <span>✏️</span> Ask a Question
+      </button>
+    </div>
+  </div>
+
+  <!-- Search badge -->
+  @if(isSearchMode) {
+  <div class="search-badge">
+    Showing results for <strong>"{{ searchQuery }}"</strong>
+    <button class="badge-clear" (click)="clearSearch()">Clear</button>
+  </div>
+  }
+
+  <!-- Feed -->
+  <div class="feed">
+    @if(questions.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="empty-icon">🌿</span>
+      <p>{{ isSearchMode ? 'No questions match your search.' : 'No questions yet. Be the first to ask!' }}</p>
+    </div>
+    }
+
+    @for(question of questions; track question.id) {
+    <div class="question-card" [class.expanded]="question.showAnswers">
+      <!-- Card Header -->
+      <div class="card-header">
+        <div class="author-info">
+          <div class="avatar">{{ (question.user_name || 'U').charAt(0).toUpperCase() }}</div>
+          <div>
+            <span class="author-name">{{ question.user_name }}</span>
+            <span class="timestamp">{{ timeAgo(question.timestamp) }}</span>
+          </div>
+        </div>
+        <div class="answer-badge">
+          {{ question.answer_count }} {{ question.answer_count === 1 ? 'answer' : 'answers' }}
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <p class="question-text">{{ question.question }}</p>
+
+      <!-- Toggle Answers -->
+      <button class="toggle-answers-btn" [id]="'toggle-answers-' + question.id" (click)="toggleAnswers(question)">
+        @if(question.showAnswers) {
+        <span>▲ Hide Answers</span>
+        } @else {
+        <span>▼ {{ question.answer_count > 0 ? 'See ' + question.answer_count + ' Answer' + (question.answer_count === 1
+          ? '' : 's') : 'Answer this question' }}</span>
+        }
+      </button>
+
+      <!-- Answers Section -->
+      @if(question.showAnswers) {
+      <div class="answers-section">
+        @if(question.loadingAnswers) {
+        <div class="answers-loading">
+          <div class="spinner"></div>
+        </div>
+        }
+
+        @if(!question.loadingAnswers && question.answers) {
+        @if(question.answers.length === 0) {
+        <p class="no-answers">No answers yet. Write the first one!</p>
+        }
+        @for(answer of question.answers; track answer.id) {
+        <div class="answer-card">
+          <div class="answer-header">
+            <div class="avatar avatar-sm">{{ (answer.user_name || 'U').charAt(0).toUpperCase() }}</div>
+            <span class="author-name">{{ answer.user_name }}</span>
+            <span class="timestamp">{{ timeAgo(answer.timestamp) }}</span>
+          </div>
+          <p class="answer-text">{{ answer.answer }}</p>
+        </div>
+        }
+        }
+
+        <!-- Write Answer -->
+        <div class="write-answer">
+          <div class="avatar avatar-sm">{{ (userName || 'U').charAt(0).toUpperCase() }}</div>
+          <div class="answer-input-wrapper">
+            <textarea [id]="'answer-input-' + question.id" class="answer-textarea" placeholder="Write your answer..."
+              [(ngModel)]="question.newAnswerText" rows="2"></textarea>
+            <button class="submit-answer-btn" [disabled]="!question.newAnswerText?.trim() || question.submittingAnswer"
+              (click)="submitAnswer(question)">
+              @if(question.submittingAnswer) { Posting... } @else { Post Answer }
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Loading state -->
+    @if(isLoading) {
+    <div class="loading-row">
+      <div class="spinner"></div>
+      <span>Loading questions...</span>
+    </div>
+    }
+
+    <!-- Infinite scroll sentinel -->
+    @if(hasMore && !isLoading) {
+    <div #sentinel class="scroll-sentinel"></div>
+    }
+
+    @if(!hasMore && questions.length > 0) {
+    <div class="end-message">You've reached the end 🎉</div>
+    }
+  </div>
+</div>
+
+<!-- Ask Question Modal -->
+@if(showAskModal) {
+<div class="modal-overlay" (click)="closeAskModal()">
+  <div class="modal-panel slide-up" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Ask a Question</h2>
+      <button class="modal-close" (click)="closeAskModal()">✕</button>
+    </div>
+    <textarea id="new-question-textarea" class="question-textarea"
+      placeholder="What would you like to ask? Be specific..." [(ngModel)]="newQuestionText" rows="5"
+      autofocus></textarea>
+    <div class="modal-footer">
+      <span class="char-count">{{ newQuestionText.length }} chars</span>
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeAskModal()">Cancel</button>
+        <button id="submit-question-btn" class="submit-btn" [disabled]="!newQuestionText.trim() || submittingQuestion"
+          (click)="submitQuestion()">
+          @if(submittingQuestion) { Posting... } @else { Post Question }
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

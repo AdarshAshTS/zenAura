@@ -1,0 +1,21 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 
+  When the layout class .with-sidebar is present, 
+  we give the main-content a left margin to account for the collapsed width
+*/
+.app-layout.with-sidebar .main-content {
+  margin-left: 80px; 
+}

@@ -1,0 +1,81 @@
+<div class="auth-container">
+  <div class="auth-box" [class.register-mode]="!isLoginMode">
+    
+    <!-- Background Animated Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="auth-content">
+      <div class="auth-header">
+        <h2>{{ isLoginMode ? 'Welcome Back' : 'Join Us' }}</h2>
+        <p>{{ isLoginMode ? 'Sign in to continue to ZenAura' : 'Create an account to get started' }}</p>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #authForm="ngForm" class="auth-form">
+        
+        <div class="input-group slide-in" *ngIf="!isLoginMode">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <i class="icon">👤</i>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              [(ngModel)]="signupData.username" 
+              placeholder="Enter your username"
+              [required]="!isLoginMode">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <i class="icon">✉️</i>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              [ngModel]="isLoginMode ? loginData.email : signupData.email" 
+              (ngModelChange)="isLoginMode ? loginData.email = $event : signupData.email = $event"
+              placeholder="Enter your email" 
+              required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="icon">🔒</i>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              [ngModel]="isLoginMode ? loginData.password : signupData.password" 
+              (ngModelChange)="isLoginMode ? loginData.password = $event : signupData.password = $event"
+              placeholder="Enter your password" 
+              required>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">{{ isLoginMode ? 'Sign In' : 'Sign Up' }}</span>
+          <div class="loader" *ngIf="isLoading"></div>
+        </button>
+
+      </form>
+
+      <div class="auth-footer">
+        <p>
+          {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
+          <a href="javascript:void(0)" (click)="toggleMode()">
+            {{ isLoginMode ? 'Create one' : 'Sign in here' }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

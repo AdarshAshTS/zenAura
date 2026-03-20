@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
+.sidebar {
+  width: 88px; /* Slightly wider collapsed state */
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background: #111827; /* Solid sleek dark gray */
+  border-right: 1px solid #1f2937;
+  font-family: 'Outfit', sans-serif;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar:hover {
+  width: 250px;
+}
+
+/* Header / Logo section */
+.sidebar-header {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid #1f2937;
+  margin-bottom: 24px;
+}
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  white-space: nowrap;
+}
+
+.logo-icon {
+  font-size: 26px;
+  min-width: 40px;
+  text-align: center;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #10b981; /* Emerald solid color */
+  letter-spacing: 0.5px;
+}
+
+/* Nav List */
+.nav-list {
+  list-style: none;
+  padding: 0 16px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-item {
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 56px;
+  padding: 0 16px;
+  color: #9ca3af; /* Gray text */
+  border-radius: 14px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover .nav-link {
+  background: #1f2937; /* Slightly lighter gray */
+  color: #f3f4f6; /* Off-white text */
+  transform: translateX(6px);
+}
+
+/* Add an active indicator bar */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px; 
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 4px;
+  background: #10b981;
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-item.active .nav-link {
+  background: rgba(16, 185, 129, 0.1); 
+  color: #10b981; /* Emerald active text */
+}
+
+.nav-link .icon {
+  font-size: 22px;
+  min-width: 24px;
+  text-align: center;
+  display: block;
+}
+
+.nav-link .label {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0;
+  visibility: hidden; 
+  transform: translateX(-15px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+.sidebar:hover .label {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition: opacity 0.4s 0.1s ease, transform 0.4s 0.1s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0s;
+}

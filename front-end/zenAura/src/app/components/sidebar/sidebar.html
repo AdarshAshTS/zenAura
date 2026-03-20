@@ -1,0 +1,17 @@
+<nav class="sidebar glass-panel">
+  <div class="sidebar-header">
+    <div class="logo-box">
+      <span class="icon logo-icon">✨</span>
+      <span class="label logo-text">ZenAura</span>
+    </div>
+  </div>
+
+  <ul class="nav-list">
+    <li class="nav-item" *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="active">
+      <div class="nav-link">
+        <span class="icon">{{ item.icon }}</span>
+        <span class="label">{{ item.name }}</span>
+      </div>
+    </li>
+  </ul>
+</nav>

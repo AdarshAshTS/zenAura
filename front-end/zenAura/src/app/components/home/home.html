@@ -1,0 +1,21 @@
+<div class="home-container">
+  <!-- Dynamic background shapes matching the auth screen -->
+  <div class="shape shape-3"></div>
+  <div class="shape shape-4"></div>
+
+  <div class="glass-panel slide-up">
+    <div class="welcome-header">
+      <div class="avatar-circle">
+        <span class="avatar-text">{{ userName.charAt(0).toUpperCase() }}</span>
+      </div>
+      <h1>Hey, <span class="highlight">{{ userName }}</span>!</h1>
+      <p>Welcome to your ZenAura dashboard.</p>
+    </div>
+
+    <div class="action-section">
+      <button class="logout-btn" (click)="handleLogout()">
+        <span class="icon">🚪</span> Logout
+      </button>
+    </div>
+  </div>
+</div>
