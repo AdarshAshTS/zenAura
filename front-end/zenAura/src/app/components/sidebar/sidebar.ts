@@ -14,6 +14,7 @@ export class Sidebar {
     { name: 'Home', icon: '🏠', route: '/home' },
     { name: 'Quora', icon: '❓', route: '/quora' },
     { name: 'Chat', icon: '💬', route: '/chat' },
-    { name: 'Profile', icon: '👤', route: '/profile' }
+    { name: 'Profile', icon: '👤', route: '/profile' },
+    { name: 'Journal', icon: '📝', route: '/journal' }
   ];
 }

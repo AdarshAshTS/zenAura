@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+.journal-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #1e1e24 0%, #151518 100%);
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.journal-container {
+  width: 100%;
+  max-width: 800px;
+  height: 85vh;
+  background: rgba(40, 42, 54, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.date-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.date-display h2 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: #e5e5e5;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.read-only {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e5e5e5;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-btn:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.journal-body {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(255, 255, 255, 0.04) 31px,
+    rgba(255, 255, 255, 0.04) 32px
+  );
+  /* The line height of textarea should match the background gradient exactly */
+}
+
+.journal-textarea {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: none;
+  resize: none;
+  padding: 2rem 3rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.75rem;
+  line-height: 32px; /* Matches background gradient spacing */
+  color: #f1f5f9;
+  outline: none;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.journal-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.journal-textarea:disabled {
+  color: rgba(241, 245, 249, 0.7);
+}
+
+.journal-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 48px;
+  width: 2px;
+  background: rgba(239, 68, 68, 0.3); /* Red margin line like a notebook */
+  z-index: 1;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(40, 42, 54, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.journal-footer {
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-message {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #10b981;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.save-message.visible {
+  opacity: 1;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+}
+
+.save-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.save-btn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .journal-wrapper {
+    padding: 1rem;
+  }
+  .journal-container {
+    height: 90vh;
+  }
+  .journal-textarea {
+    font-size: 1.5rem;
+    padding: 1.5rem 2.5rem 1.5rem 4rem;
+  }
+  .journal-body::before {
+    left: 32px;
+  }
+  .date-display h2 {
+    font-size: 1.25rem;
+  }
+}

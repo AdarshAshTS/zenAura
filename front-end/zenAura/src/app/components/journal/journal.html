@@ -1,0 +1,47 @@
+<div class="journal-wrapper">
+  <div class="journal-container">
+    <div class="journal-header">
+      <button class="nav-btn prev-btn" (click)="previousDay()" aria-label="Previous Day">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="currentColor"/></svg>
+      </button>
+
+      <div class="date-display">
+        <h2>{{ displayDate }}</h2>
+        <span class="status-badge" *ngIf="isToday">Today</span>
+        <span class="status-badge read-only" *ngIf="!isToday">Read Only</span>
+      </div>
+
+      <button class="nav-btn next-btn" (click)="nextDay()" [disabled]="isToday || isFuture" [class.disabled]="isToday || isFuture" aria-label="Next Day">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/></svg>
+      </button>
+    </div>
+
+    <div class="journal-body">
+      <div *ngIf="isLoading" class="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+      
+      <textarea 
+        class="journal-textarea" 
+        [(ngModel)]="journalContent" 
+        [disabled]="!isEditable" 
+        [placeholder]="isEditable ? 'Dear Diary...\nToday was...' : 'No entry for this day.'"
+        spellcheck="false"
+      ></textarea>
+      
+      <!-- Lined paper effect overlay -->
+      <div class="lines-overlay"></div>
+    </div>
+
+    <div class="journal-footer">
+      <span class="save-message" [class.visible]="saveMessage">{{ saveMessage }}</span>
+      <button 
+        class="save-btn" 
+        *ngIf="isEditable" 
+        (click)="saveJournal()" 
+        [disabled]="isSaving || !journalContent.trim()">
+        {{ isSaving ? 'Saving...' : 'Save Entry' }}
+      </button>
+    </div>
+  </div>
+</div>

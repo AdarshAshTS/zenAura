@@ -5,9 +5,11 @@ const db = require('./config/db');
 const usersDB = require('./models/user/usersDB');
 const quoraDB = require('./models/quora/quoraDB');
 const chatDB = require('./models/chat/chatDB');
+const journalDB = require('./models/journal/journalDB');
 const authRoutes = require('./routes/auth');
 const quoraRoutes = require('./routes/quora');
 const chatRoutes = require('./routes/chat');
+const journalRoutes = require('./routes/journal');
 const { AppError } = require('./errors/errorCodes');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -30,11 +32,13 @@ app.use(express.json());
 usersDB.createUserTable().catch(console.error);
 quoraDB.createTables().catch(console.error);
 chatDB.createMessagesTable().catch(console.error);
+journalDB.createJournalTable().catch(console.error);
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/quora', quoraRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/journal', journalRoutes);
 
 // Socket.io logic
 const connectedUsers = new Map(); // userId -> socketId
