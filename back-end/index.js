@@ -4,11 +4,22 @@ const cors = require('cors');
 const db = require('./config/db');
 const usersDB = require('./models/user/usersDB');
 const quoraDB = require('./models/quora/quoraDB');
+const chatDB = require('./models/chat/chatDB');
 const authRoutes = require('./routes/auth');
 const quoraRoutes = require('./routes/quora');
+const chatRoutes = require('./routes/chat');
 const { AppError } = require('./errors/errorCodes');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -18,10 +29,65 @@ app.use(express.json());
 // Initialize Database Tables
 usersDB.createUserTable().catch(console.error);
 quoraDB.createTables().catch(console.error);
+chatDB.createMessagesTable().catch(console.error);
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/quora', quoraRoutes);
+app.use('/api/chat', chatRoutes);
+
+// Socket.io logic
+const connectedUsers = new Map(); // userId -> socketId
+
+io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
+
+  socket.on('join', (userId) => {
+    connectedUsers.set(userId, socket.id);
+    console.log(`User ${userId} joined with socket ${socket.id}`);
+  });
+
+  socket.on('send_message', async (data) => {
+    // data: { senderId, receiverId, message, senderName, tempId? }
+    try {
+      const savedMessage = await chatDB.saveMessage(data.senderId, data.receiverId, data.message);
+      const messageToEmit = {
+        id: savedMessage.id,
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        senderName: data.senderName,
+        message: data.message,
+        timestamp: savedMessage.timestamp,
+        is_read: savedMessage.is_read,
+        tempId: data.tempId  // echo back so sender can reconcile optimistic message
+      };
+
+      // Send to receiver
+      const receiverSocketId = connectedUsers.get(data.receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('receive_message', messageToEmit);
+      }
+
+      // Echo back to sender (confirms the optimistic message)
+      const senderSocketId = connectedUsers.get(data.senderId);
+      if (senderSocketId) {
+        io.to(senderSocketId).emit('receive_message', messageToEmit);
+      }
+    } catch (error) {
+      console.error('Error saving or sending message:', error);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    for (const [userId, socketId] of connectedUsers.entries()) {
+      if (socketId === socket.id) {
+        connectedUsers.delete(userId);
+        break;
+      }
+    }
+    console.log('Client disconnected:', socket.id);
+  });
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {
@@ -36,6 +102,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

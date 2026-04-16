@@ -19,3 +19,21 @@
 .app-layout.with-sidebar .main-content {
   margin-left: 80px; 
 }
+
+/* Skeleton Loader Base Styles */
+.skeleton {
+  background: #2a2a2a;
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

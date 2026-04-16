@@ -383,3 +383,53 @@
   color: white; border: none; padding: 10px 24px; border-radius: 10px; font-weight: 600; cursor: pointer;
 }
 .submit-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* Skeleton Enhancements for Quora */
+.skeleton-q-card {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.skeleton-q-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.skeleton-q-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeleton-q-name {
+  width: 120px;
+  height: 14px;
+  margin-bottom: 6px;
+}
+
+.skeleton-q-time {
+  width: 60px;
+  height: 10px;
+}
+
+.skeleton-q-text {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-q-text.short {
+  width: 60%;
+}
+
+.skeleton-q-footer {
+  width: 100px;
+  height: 14px;
+  margin-top: 20px;
+}

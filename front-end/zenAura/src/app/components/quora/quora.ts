@@ -101,7 +101,10 @@ export class Quora implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || '';
+    let token = '';
+    if (typeof window !== 'undefined' && localStorage) {
+      token = localStorage.getItem('token') || '';
+    }
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 

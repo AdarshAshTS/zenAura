@@ -112,6 +112,55 @@ const getUserByEmail = async (email) => {
   }
 };
 
+// Get all users
+const getAllUsers = async (excludeId = null) => {
+  let queryText = `SELECT id, username, email, created_at FROM users`;
+  const params = [];
+  if (excludeId) {
+    queryText += ` WHERE id != $1`;
+    params.push(excludeId);
+  }
+  queryText += ` ORDER BY username ASC;`;
+
+  try {
+    const { rows } = await db.query(queryText, params);
+    return rows;
+  } catch (error) {
+    console.error('Error getting all users:', error);
+    throw error;
+  }
+};
+
+// Get users sorted by latest interaction
+const getChatUsersWithLatestMessage = async (currentUserId) => {
+  const queryText = `
+    SELECT 
+      u.id, 
+      u.username, 
+      u.email, 
+      MAX(m.timestamp) as last_message_time,
+      (SELECT message FROM messages 
+       WHERE (sender_id = u.id AND receiver_id = $1) 
+          OR (sender_id = $1 AND receiver_id = u.id) 
+       ORDER BY timestamp DESC LIMIT 1) as last_message,
+      (SELECT COUNT(*) FROM messages 
+       WHERE sender_id = u.id AND receiver_id = $1 AND is_read = FALSE) as unread_count
+    FROM users u
+    LEFT JOIN messages m ON (m.sender_id = $1 AND m.receiver_id = u.id) 
+                          OR (m.sender_id = u.id AND m.receiver_id = $1)
+    WHERE u.id != $1
+    GROUP BY u.id, u.username, u.email
+    ORDER BY last_message_time DESC NULLS LAST, u.username ASC;
+  `;
+  try {
+    const { rows } = await db.query(queryText, [currentUserId]);
+    return rows;
+  } catch (error) {
+    console.error('Error getting chat users with latest message:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   createUserTable,
   addUser,
@@ -119,5 +168,7 @@ module.exports = {
   modifyUser,
   deleteUser,
   getUserByEmailOrUsername,
-  getUserByEmail
+  getUserByEmail,
+  getAllUsers,
+  getChatUsersWithLatestMessage
 };

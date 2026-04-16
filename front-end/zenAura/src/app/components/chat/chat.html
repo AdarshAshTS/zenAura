@@ -1,0 +1,156 @@
+<div class="chat-container">
+
+  <!-- ── Main Chat Window ────────────────────────────────────── -->
+  <main class="chat-main">
+    @if (selectedUser) {
+
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="header-user">
+          <div class="avatar" [style.background-color]="getUserColor(selectedUser.username)">
+            {{ getInitials(selectedUser.username) }}
+          </div>
+          <div class="header-info">
+            <h3>{{ selectedUser.username }}</h3>
+            <span class="status">{{ selectedUser.is_online ? 'online' : 'last seen recently' }}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Messages -->
+      <div class="messages-area" #scrollMe (scroll)="onScroll($event)">
+
+        @if (isLoadingOlderMessages) {
+          <div class="load-more-bar">
+            <div class="mini-spinner"></div>
+            <span>Loading older messages...</span>
+          </div>
+        }
+
+        @if (isLoadingHistory) {
+          <div class="history-skeleton">
+            <div class="bubble-skel skeleton left"></div>
+            <div class="bubble-skel skeleton right"></div>
+            <div class="bubble-skel skeleton left"></div>
+          </div>
+        } @else {
+          @for (msg of messages; track msg.id ?? $index) {
+            <div
+              class="msg-wrap"
+              [class.sent]="msg.senderId === currentUser?.id"
+              [class.recv]="msg.senderId !== currentUser?.id"
+            >
+              <div class="bubble">
+                <p>{{ msg.message }}</p>
+                <div class="meta">
+                  <span class="meta-time">{{ msg.timestamp | date:'shortTime' }}</span>
+                  @if (msg.senderId === currentUser?.id) {
+                    <span class="read-check">{{ msg.is_read ? '✓✓' : '✓' }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="start-chat-msg">
+              <span class="icon">💬</span>
+              <p>No messages yet — say hello!</p>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Input footer -->
+      <footer class="chat-footer">
+        <div class="input-row">
+          <input
+            class="msg-input"
+            type="text"
+            placeholder="Write a message..."
+            [(ngModel)]="newMessage"
+            (keyup.enter)="sendMessage()"
+            [disabled]="isSending"
+          >
+          <button
+            class="send-btn"
+            [disabled]="!newMessage.trim() || isSending"
+            (click)="sendMessage()"
+            title="Send"
+          >➤</button>
+        </div>
+      </footer>
+
+    } @else {
+      <div class="no-chat-selected">
+        <div class="no-chat-content">
+          <span class="big-icon">💬</span>
+          <h3>Select a conversation</h3>
+          <p>Choose someone from the list to start chatting.</p>
+        </div>
+      </div>
+    }
+  </main>
+
+  <!-- ── Sidebar: Contact List ──────────────────────────────── -->
+  <aside class="chat-sidebar">
+    <div class="sidebar-header">
+      <h2>Messages</h2>
+      <div class="search-wrapper">
+        <i class="search-icon">🔍</i>
+        <input
+          type="text"
+          placeholder="Search people..."
+          [(ngModel)]="searchQuery"
+          (input)="filterUsers()"
+        >
+      </div>
+    </div>
+
+    <div class="user-list">
+      @if (isLoadingUsers) {
+        @for (i of skeletonArray; track i) {
+          <div class="user-item skeleton-item">
+            <div class="avatar-skel skeleton"></div>
+            <div class="info-skel">
+              <div class="name-skel skeleton"></div>
+              <div class="last-skel skeleton"></div>
+            </div>
+          </div>
+        }
+      } @else {
+        @for (user of filteredUsers; track user.id) {
+          <div
+            class="user-item"
+            [class.active]="selectedUser?.id === user.id"
+            (click)="selectUser(user)"
+          >
+            <div class="avatar" [style.background-color]="getUserColor(user.username)">
+              {{ getInitials(user.username) }}
+              @if (user.is_online) {
+                <span class="online-dot"></span>
+              }
+            </div>
+            <div class="user-info">
+              <div class="user-header">
+                <span class="username">{{ user.username }}</span>
+                @if (user.last_message_time) {
+                  <span class="msg-time">{{ user.last_message_time | date:'shortTime' }}</span>
+                }
+              </div>
+              <div class="last-msg-row">
+                <p class="last-msg">{{ user.last_message || 'No messages yet' }}</p>
+                @if (user.unread_count > 0) {
+                  <span class="unread-badge">{{ user.unread_count }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-list">
+            <p>No users found</p>
+          </div>
+        }
+      }
+    </div>
+  </aside>
+
+</div>

@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 
 .sidebar {
-  width: 88px; /* Slightly wider collapsed state */
+  width: 88px;
+  /* Slightly wider collapsed state */
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
-  background: #111827; /* Solid sleek dark gray */
+  background: #111827;
+  /* Solid sleek dark gray */
   border-right: 1px solid #1f2937;
   font-family: 'Outfit', sans-serif;
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -49,8 +51,10 @@
 .logo-text {
   font-size: 24px;
   font-weight: 700;
-  color: #10b981; /* Emerald solid color */
-  letter-spacing: 0.5px;
+  color: #10b981;
+  /* Emerald solid color */
+  letter-spacing: 1px;
+  margin-left: 5%;
 }
 
 /* Nav List */
@@ -76,15 +80,18 @@
   gap: 18px;
   height: 56px;
   padding: 0 16px;
-  color: #9ca3af; /* Gray text */
+  color: #9ca3af;
+  /* Gray text */
   border-radius: 14px;
   white-space: nowrap;
   transition: all 0.3s ease;
 }
 
 .nav-item:hover .nav-link {
-  background: #1f2937; /* Slightly lighter gray */
-  color: #f3f4f6; /* Off-white text */
+  background: #1f2937;
+  /* Slightly lighter gray */
+  color: #f3f4f6;
+  /* Off-white text */
   transform: translateX(6px);
 }
 
@@ -92,7 +99,7 @@
 .nav-item.active::before {
   content: '';
   position: absolute;
-  left: -16px; 
+  left: -16px;
   top: 50%;
   transform: translateY(-50%);
   height: 30px;
@@ -102,8 +109,9 @@
 }
 
 .nav-item.active .nav-link {
-  background: rgba(16, 185, 129, 0.1); 
-  color: #10b981; /* Emerald active text */
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  /* Emerald active text */
 }
 
 .nav-link .icon {
@@ -117,7 +125,7 @@
   font-size: 16px;
   font-weight: 500;
   opacity: 0;
-  visibility: hidden; 
+  visibility: hidden;
   transform: translateX(-15px);
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
 }

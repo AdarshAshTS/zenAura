@@ -109,12 +109,22 @@
     </div>
     }
 
-    <!-- Loading state -->
+    <!-- Loading state (Skeleton) -->
     @if(isLoading) {
-    <div class="loading-row">
-      <div class="spinner"></div>
-      <span>Loading questions...</span>
-    </div>
+      @for(i of [1,2,3]; track i) {
+        <div class="skeleton-q-card">
+          <div class="skeleton-q-header">
+            <div class="skeleton skeleton-q-avatar"></div>
+            <div>
+              <div class="skeleton skeleton-q-name"></div>
+              <div class="skeleton skeleton-q-time"></div>
+            </div>
+          </div>
+          <div class="skeleton skeleton-q-text"></div>
+          <div class="skeleton skeleton-q-text short"></div>
+          <div class="skeleton skeleton-q-footer"></div>
+        </div>
+      }
     }
 
     <!-- Infinite scroll sentinel -->
