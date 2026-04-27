@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const quoraRoutes = require('./routes/quora');
 const chatRoutes = require('./routes/chat');
 const journalRoutes = require('./routes/journal');
+const chatbotRoutes = require('./routes/chatbot');
 const { AppError } = require('./errors/errorCodes');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -39,6 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/quora', quoraRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/journal', journalRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Socket.io logic
 const connectedUsers = new Map(); // userId -> socketId

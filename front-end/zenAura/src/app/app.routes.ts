@@ -4,6 +4,7 @@ import { Home } from './components/home/home';
 import { Quora } from './components/quora/quora';
 import { Chat } from './components/chat/chat';
 import { Journal } from './components/journal/journal';
+import { ChatbotComponent } from './components/chatbot/chatbot';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'quora', component: Quora },
   { path: 'chat', component: Chat },
   { path: 'journal', component: Journal },
+  { path: 'chatbot', component: ChatbotComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

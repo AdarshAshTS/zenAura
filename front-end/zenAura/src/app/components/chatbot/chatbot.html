@@ -1,0 +1,54 @@
+<div class="chatbot-wrapper">
+  <div class="chatbot-container glass-panel">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="ai-avatar">✨</div>
+        <div class="ai-status">
+          <h2>Zen AI</h2>
+          <span class="status-indicator"></span>
+          <span class="status-text">Online</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-messages" #chatScrollContainer>
+      <div 
+        *ngFor="let msg of messages" 
+        [ngClass]="{'message-user': msg.sender === 'user', 'message-model': msg.sender === 'model'}" 
+        class="message-row">
+        
+        <div *ngIf="msg.sender === 'model'" class="message-avatar">✨</div>
+        
+        <div class="message-bubble glass-bubble">
+          {{ msg.text }}
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="message-row message-model">
+        <div class="message-avatar">✨</div>
+        <div class="message-bubble glass-bubble typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-container">
+      <div class="input-wrapper">
+        <textarea 
+          [(ngModel)]="userInput" 
+          (keydown.enter)="$event.preventDefault(); sendMessage()"
+          (input)="adjustTextarea($event)"
+          placeholder="Ask me anything..." 
+          class="chat-input"
+          [disabled]="isLoading"
+          rows="1"
+        ></textarea>
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

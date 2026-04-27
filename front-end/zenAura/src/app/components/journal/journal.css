@@ -101,12 +101,10 @@
   display: flex;
   flex-direction: column;
   padding: 0;
-  background: repeating-linear-gradient(
-    transparent,
-    transparent 31px,
-    rgba(255, 255, 255, 0.04) 31px,
-    rgba(255, 255, 255, 0.04) 32px
-  );
+  background: repeating-linear-gradient(transparent,
+      transparent 31px,
+      rgba(255, 255, 255, 0.04) 31px,
+      rgba(255, 255, 255, 0.04) 32px);
   /* The line height of textarea should match the background gradient exactly */
 }
 
@@ -119,7 +117,8 @@
   padding: 2rem 3rem;
   font-family: 'Caveat', cursive;
   font-size: 1.75rem;
-  line-height: 32px; /* Matches background gradient spacing */
+  line-height: 32px;
+  /* Matches background gradient spacing */
   color: #f1f5f9;
   outline: none;
   box-sizing: border-box;
@@ -141,13 +140,16 @@
   bottom: 0;
   left: 48px;
   width: 2px;
-  background: rgba(239, 68, 68, 0.3); /* Red margin line like a notebook */
+  /* background: rgba(239, 68, 68, 0.3); /* Red margin line like a notebook */
   z-index: 1;
 }
 
 .loading-overlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(40, 42, 54, 0.7);
   backdrop-filter: blur(4px);
   z-index: 10;
@@ -166,7 +168,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .journal-footer {
@@ -225,16 +229,20 @@
   .journal-wrapper {
     padding: 1rem;
   }
+
   .journal-container {
     height: 90vh;
   }
+
   .journal-textarea {
     font-size: 1.5rem;
     padding: 1.5rem 2.5rem 1.5rem 4rem;
   }
+
   .journal-body::before {
     left: 32px;
   }
+
   .date-display h2 {
     font-size: 1.25rem;
   }
